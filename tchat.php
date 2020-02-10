@@ -23,22 +23,26 @@ if(!isset($_SESSION["pseudo"])){
     </nav>
 
     <div class="messages">
+
+    <?php
+    // Connect database
+    require("functions/database.php");
+    // INSERT prepare
+    $req = $db->prepare("SELECT * FROM users_messages");
+    // execute
+    $req->execute();
+
+    while ($result = $req->fetch(PDO::FETCH_ASSOC)){
+    ?>
         <div class="message">
-            <strong>Thomas:</strong>
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, minima accusamus! Fugit facere a labore dolor beatae unde qui eos, dignissimos, aliquid itaque corporis animi molestias quas veritatis consectetur odit.</span>
+            <strong><?= $result["pseudo"] ?>:</strong>
+            <span><?= $result["message"] ?></span>
+            <span>(<?= $result["likes"] ?>)</span>
+            <a href="functions/addLIke.php?id=<?= $result["id"] ?>">Like</a>
         </div>
-        <div class="message">
-            <strong>Thomas:</strong>
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, minima accusamus! Fugit facere a labore dolor beatae unde qui eos, dignissimos, aliquid itaque corporis animi molestias quas veritatis consectetur odit.</span>
-        </div>
-        <div class="message messageSession">
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, minima accusamus! Fugit facere a labore dolor beatae unde qui eos, dignissimos, aliquid itaque corporis animi molestias quas veritatis consectetur odit.</span>
-        </div>
-        <div class="message">
-            <strong>User test:</strong>
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, minima accusamus! Fugit facere a labore dolor beatae unde qui eos, dignissimos, aliquid itaque corporis animi molestias quas veritatis consectetur odit.</span>
-        </div>
-    </div>
+    <?php
+    }
+    ?>
 
     <form action="functions/setMessage.php" class="tchatForm" method="post">
         <textarea name="message"></textarea>
